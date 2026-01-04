@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\UserController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,5 +27,10 @@ Route::get('/make-admin', function() {
     }
     return 'Please login first! <a href="/login">Login</a>';
 })->middleware('auth');
+
+// Admin Routes - Protected by admin middleware
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+});
 
 require __DIR__.'/auth.php';
